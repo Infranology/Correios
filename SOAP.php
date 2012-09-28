@@ -68,7 +68,7 @@ class Correios_SOAP
     /**
      * __construct function.
      *
-     * @param int    $service        Correios service.
+     * @param array  $service        Correios services.
      * @param mixed  $zipOrigin      Zip Code of the origin.
      * @param mixed  $zipDestination Zip Code of the destination.
      * @param float  $height         Height total.
@@ -104,7 +104,7 @@ class Correios_SOAP
         $receiptNotice    = 'N'
     ) {
 
-        $this->service        = (int) $service;
+        $this->service        = (array) $service;
         $this->zipOrigin      = $zipOrigin;
         $this->zipDestination = $zipDestination;
         $this->height         = $height;
@@ -185,17 +185,14 @@ class Correios_SOAP
     }
 
     /**
-     * Calculate shipping.
+     * Build an object with the arguments.
      *
-     * @return mixed
+     * @return object
      */
-    public function calculateShipping()
+    protected function constructArguments()
     {
-
         // Creates an object.
         $args                      = new stdClass();
-        // Set the service
-        $args->nCdServico          = $this->service;
         // Set Correios user login.
         $args->nCdEmpresa          = $this->login;
         // Set Correios user password.
@@ -218,15 +215,37 @@ class Correios_SOAP
         $args->nVlValorDeclarado   = $this->declared;
         $args->sCdAvisoRecebimento = $this->receiptNotice;
 
-        // Start SOAP client.
-        $soap = $this->soapClient($this->webservice);
+        return $args;
+    }
 
-        // Get the value.
-        $calc   = $soap->CalcPrecoPrazo($args);
-        $object = $calc->CalcPrecoPrazoResult->Servicos->cServico;
+    /**
+     * Calculate shipping.
+     *
+     * @return mixed
+     */
+    public function calculateShipping()
+    {
 
-        // Set the return.
-        return $this->response($this->returnType, $object);
+        // Create new object to return.
+        $shipping = new stdClass();
+
+        // Get arguments
+        $args = $this->constructArguments();
+
+        // Processes data.
+        foreach ($this->service as $key => $value) {
+            // Set the service
+            $args->nCdServico = $value;
+
+            // Start SOAP client.
+            $soap = $this->soapClient($this->webservice);
+
+            // Get the value.
+            $calc   = $soap->CalcPrecoPrazo($args);
+            $shipping->$value = $calc->CalcPrecoPrazoResult->Servicos->cServico;
+        }
+
+        return $this->response($this->returnType, $shipping);
     }
 
 }
