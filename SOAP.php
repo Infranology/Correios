@@ -6,11 +6,11 @@
  * PHP Version 5
  *
  * @category Correios
- * @package  Correios/WebServices
+ * @package  Correios/SOAP
  * @author   Infranology <claudio.sanches@infranology.com>
  * @license  http://opensource.org/licenses/mit-license.php MIT License
  * @version  GIT: v1.0
- * @link     http://github.com/
+ * @link     https://github.com/Infranology/correios_soap
  */
 
 /**
@@ -40,11 +40,11 @@
  * Ref: http://www.correios.com.br/webservices/
  *
  * @category Correios
- * @package  Correios/WebServices
+ * @package  Correios/SOAP
  * @author   Infranology <claudio.sanches@infranology.com>
  * @license  http://opensource.org/licenses/mit-license.php MIT License
  * @version  Release: v1.0
- * @link     http://github.com/
+ * @link     https://github.com/Infranology/correios_soap
  */
 class Correios_SOAP
 {
