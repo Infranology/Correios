@@ -241,7 +241,7 @@ class Correios_SOAP
             $soap = $this->soapClient($this->webservice);
 
             // Get the value.
-            $calc   = $soap->CalcPrecoPrazo($args);
+            $calc = $soap->CalcPrecoPrazo($args);
             $shipping->$value = $calc->CalcPrecoPrazoResult->Servicos->cServico;
         }
 
